@@ -5,15 +5,15 @@ import { useRouter } from "next/router";
 import Nav from "../../components/nav";
 import Error from "../../components/error";
 
-const Bench = ({bench, error}) => {
+const Bench = ({ bench, error }) => {
   const router = useRouter();
   const { id } = router.query;
   if (error) {
     return (
       <div>
-        <Error></Error>
+        <Error error="Object Error"></Error>
       </div>
-    )
+    );
   }
   return (
     <div>
@@ -32,16 +32,15 @@ const Bench = ({bench, error}) => {
 
 Bench.getInitialProps = async () => {
   try {
-  const router = useRouter();
-  const { id } = router.query;
-  const url = "http://localhost:1337/benches/" + {id};
-  const res = await axios.get(url);
-  const bench: string[] = res.data;
-  return { bench };
+    const router = useRouter();
+    const id = router.query.id;
+    const url = "http://localhost:1337/benches/" + id;
+    const res = await axios.get(url);
+    const bench: string[] = res.data;
+    return { bench };
   } catch (error) {
-    return {error};
+    return { error };
   }
-
 };
 
 export default Bench;

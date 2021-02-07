@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Nav from "./nav";
 
-const Error = () => {
+const Error = ({error}) => {
   return (
     <div>
       <Head>
@@ -14,6 +14,8 @@ const Error = () => {
         <h3>
           Error - Please return <Link href="/">Home</Link>
         </h3>
+        <br/>
+        <p>Error Info - {error}</p>
       </div>
     </div>
   );
