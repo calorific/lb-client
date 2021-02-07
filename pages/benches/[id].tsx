@@ -3,10 +3,18 @@ import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Nav from "../../components/nav";
+import Error from "../../components/error";
 
-const Bench = () => {
+const Bench = ({bench, error}) => {
   const router = useRouter();
   const { id } = router.query;
+  if (error) {
+    return (
+      <div>
+        <Error></Error>
+      </div>
+    )
+  }
   return (
     <div>
       <Head>
@@ -14,16 +22,26 @@ const Bench = () => {
       </Head>
       <Nav></Nav>
       <div className="text-center text-9xl">
-        <h1>Bench ID: {id}</h1>
+        {bench.map((title) => (
+          <h1>{title}</h1>
+        ))}
       </div>
     </div>
   );
 };
 
 Bench.getInitialProps = async () => {
-  const res = await axios.get("http://localhost:1337/benches");
-  const benches: string[] = res.data;
-  return { benches };
+  try {
+  const router = useRouter();
+  const { id } = router.query;
+  const url = "http://localhost:1337/benches/" + {id};
+  const res = await axios.get(url);
+  const bench: string[] = res.data;
+  return { bench };
+  } catch (error) {
+    return {error};
+  }
+
 };
 
 export default Bench;
