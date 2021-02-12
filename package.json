@@ -2,7 +2,7 @@
   "name": "lb-client",
   "version": "1.0.0",
   "description": "Client for Lunchbencher",
-  "repository": "https://github.com/edapm/lb-client.git",
+  "repository": "https://github.com/calorific/lb-client.git",
   "author": "Ed Mason <mynameisprivate3@gmail.com>",
   "license": "Calorific",
   "private": true,
