@@ -7,7 +7,20 @@ import ReactMapGL from "react-map-gl";
 const Bench = ({ bench }) => {
   const api = require("@what3words/api");
   api.setOptions({ key: "ZHCEP0DY" });
-  const coords = api.convertToCoordinates(bench.location);
+  const data = api.convertToCoordinates(bench.location).then((data) => {
+    console.log(data);
+  });
+
+
+  const [coords, setCoords] = useState();
+
+/*  async function getCoords() {
+    const jason = await data;
+    setCoords(jason);
+  }
+3
+  getCoords(); */
+
 
   const [viewport, setViewport] = useState({
     width: 1000,
