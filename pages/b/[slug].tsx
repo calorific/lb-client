@@ -7,28 +7,26 @@ import ReactMapGL from "react-map-gl";
 const Bench = ({ bench }) => {
   const api = require("@what3words/api");
   api.setOptions({ key: "ZHCEP0DY" });
-  const data = api.convertToCoordinates(bench.location).then((data) => {
-    console.log(data);
-  });
-
-
-  const [coords, setCoords] = useState();
-
-/*  async function getCoords() {
-    const jason = await data;
-    setCoords(jason);
-  }
-3
-  getCoords(); */
-
+  const data = api.convertToCoordinates(bench.location);
 
   const [viewport, setViewport] = useState({
     width: 1000,
     height: 400,
-    latitude: 53,
-    longitude: 0,
+    latitude: 0, // default value
+    longitude: 0, // default value
     zoom: 16,
   });
+
+  async function getCoords() {
+    const jason = await data;
+    setViewport({
+      ...viewport,
+      latitude: jason.coordinates.lat,
+      longitude: jason.coordinates.lng,
+    });
+  }
+
+  getCoords();
 
   return (
     <div>
