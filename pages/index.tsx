@@ -7,7 +7,7 @@ export default function Home({ benches }) {
   return (
     <div>
       <Head>
-        <title>Lunchbencher - Benches</title>
+        <title>Lunchbencher</title>
       </Head>
       <Nav></Nav>
       <div>
@@ -15,7 +15,7 @@ export default function Home({ benches }) {
           {/* loop over the benches and show them */}
           {benches &&
             benches.map((bench) => (
-              <li className="text-center text-2xl mx-5 my-5" key={bench.id}>
+              <li className="text-center text-2xl mx-5 my-5 p-10 rounded shadow-lg overflow-hidden" key={bench.id}>
                 <Link href={`/b/${bench.slug}`}>
                   <a>{bench.title}</a>
                 </Link>
@@ -29,7 +29,8 @@ export default function Home({ benches }) {
 
 export async function getStaticProps() {
   // get benches from our api
-  const res = await axios.get("http://localhost:1337/benches");
+  const url = process.env.API_URL + "/benches";
+  const res = await axios.get(url);
   const benches = await res.data;
 
   return {
