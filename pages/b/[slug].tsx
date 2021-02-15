@@ -1,13 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Head from "next/head";
 import Nav from "../../components/nav";
-import ReactMapGL from "react-map-gl";
+/*import ReactMapGL from "react-map-gl";*/
+import mapboxgl from "mapbox-gl";
 
 const Bench = ({ bench }) => {
   const api = require("@what3words/api");
   api.setOptions({ key: "ZHCEP0DY" });
+  mapboxgl.accessToken = "pk.eyJ1IjoiZWRhcG0iLCJhIjoiY2tsM29kOWtzMTBvdzMwdDd2b3dtNHYxNiJ9.ZGBau9yxktkf-2G6p57eig";
   const data = api.convertToCoordinates(bench.location);
+
+  const [map, setMap] = useState({});
+  const mapContainerRef = useRef(null);
+
+  // initialize map when component mounts
+  useEffect(() => {
+    setMap(new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: "mapbox://styles/mapbox/outdoors-v11",
+      center: [0, 0],
+      zoom: 17
+    }));
+  });
+
+
 
   const [viewport, setViewport] = useState({
     width: 500,
@@ -67,11 +84,12 @@ const Bench = ({ bench }) => {
             <br />
           </div>
           <div>
-            <ReactMapGL
+            {/*<ReactMapGL
               mapStyle="mapbox://styles/mapbox/outdoors-v11"
               mapboxApiAccessToken="pk.eyJ1IjoiZWRhcG0iLCJhIjoiY2tsM29kOWtzMTBvdzMwdDd2b3dtNHYxNiJ9.ZGBau9yxktkf-2G6p57eig"
               {...viewport}
-            ></ReactMapGL>
+            ></ReactMapGL>*/}
+            <div className="map-container" ref={mapContainerRef} />
           </div>
         </div>
       </div>
