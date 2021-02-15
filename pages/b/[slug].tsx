@@ -2,53 +2,56 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Head from "next/head";
 import Nav from "../../components/nav";
-/*import ReactMapGL from "react-map-gl";*/
 import mapboxgl from "mapbox-gl";
 
 const Bench = ({ bench }) => {
   const api = require("@what3words/api");
   api.setOptions({ key: "ZHCEP0DY" });
-  mapboxgl.accessToken = "pk.eyJ1IjoiZWRhcG0iLCJhIjoiY2tsM29kOWtzMTBvdzMwdDd2b3dtNHYxNiJ9.ZGBau9yxktkf-2G6p57eig";
+  mapboxgl.accessToken =
+    "pk.eyJ1IjoiZWRhcG0iLCJhIjoiY2tsM29kOWtzMTBvdzMwdDd2b3dtNHYxNiJ9.ZGBau9yxktkf-2G6p57eig";
   const data = api.convertToCoordinates(bench.location);
 
-  const [map, setMap] = useState({});
   const mapContainerRef = useRef(null);
 
-  // initialize map when component mounts
-  useEffect(() => {
-    setMap(new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/outdoors-v11",
-      center: [0, 0],
-      zoom: 17
-    }));
-  });
-
-
-
-  const [viewport, setViewport] = useState({
-    width: 500,
-    height: 500,
-    latitude: 0, // default value
-    longitude: 0, // default value
-    zoom: 18,
-  });
+  const [lng, setLng] = useState(0);
+  const [lat, setLat] = useState(0);
+  const [zoom, setZoom] = useState(1);
 
   async function getCoords() {
     const jason = await data;
-    setViewport({
-      ...viewport,
-      latitude: jason.coordinates.lat,
-      longitude: jason.coordinates.lng,
-    });
+    setLng(jason.coordinates.lng);
+    setLat(jason.coordinates.lat);
+    setZoom(15);
   }
 
-  getCoords();
+    getCoords();
+
+  // Initialize map when component mounts
+  useEffect(() => {
+    const map = new mapboxgl.Map({
+      container: mapContainerRef.current || '',
+      style: "mapbox://styles/mapbox/outdoors-v11",
+      center: [lng, lat],
+      zoom: zoom,
+    });
+
+    const marker = new mapboxgl.Marker().setLngLat([lng,lat]).addTo(map);
+
+    // Add navigation control (the +/- zoom buttons)
+    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+
+    // Clean up on unmount
+    return () => map.remove();
+  }, [lng, lat, zoom]);
 
   return (
     <div>
       <Head>
         <title>Bench: {bench.title}</title>
+        <link
+          href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css"
+          rel="stylesheet"
+        />
       </Head>
       <Nav></Nav>
       <div className="container mx-auto p-10">
@@ -83,19 +86,12 @@ const Bench = ({ bench }) => {
             </div>
             <br />
           </div>
-          <div>
-            {/*<ReactMapGL
-              mapStyle="mapbox://styles/mapbox/outdoors-v11"
-              mapboxApiAccessToken="pk.eyJ1IjoiZWRhcG0iLCJhIjoiY2tsM29kOWtzMTBvdzMwdDd2b3dtNHYxNiJ9.ZGBau9yxktkf-2G6p57eig"
-              {...viewport}
-            ></ReactMapGL>*/}
-            <div className="map-container" ref={mapContainerRef} />
-          </div>
+          <div className="h-96 w-96" ref={mapContainerRef} />
         </div>
       </div>
     </div>
   );
-};
+};;
 
 export async function getStaticPaths() {
   const url = process.env.API_URL + "/benches";

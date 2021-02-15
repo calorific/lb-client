@@ -1,0 +1,14 @@
+README.md
+.eslintrc.json
+.prettierrc
+.eslintignore
+package.json
+yarn.lock
+next.config.js
+postcss.config.js
+tailwind.config.js
+next-env.d.ts
+tsconfig.json
+.deepsource.toml
+.gitignore
+.env
