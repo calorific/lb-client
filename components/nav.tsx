@@ -3,8 +3,8 @@ import Link from "next/link";
 
 const Nav = () => {
   return (
-    <div className="items-center justify-between flex bg-gray-800 bg-opacity-90 px-12 py-4 mx-auto shadow-2xl">
-      <div className="text-2xl text-white font-semibold inline-flex items-center">
+    <div className="items-center justify-between flex bg-tertiary bg-opacity-90 shadow-lg px-12 py-4 mx-auto">
+      <div className="text-2xl text-black font-semibold inline-flex items-center">
         <Link href="/">
           <a>
             <span>Lunchbencher</span>

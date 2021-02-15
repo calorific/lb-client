@@ -15,7 +15,7 @@ export default function Home({ benches }) {
           {/* loop over the benches and show them */}
           {benches &&
             benches.map((bench) => (
-              <li className="text-center text-2xl mx-5 my-5 p-10 rounded shadow-lg overflow-hidden" key={bench.id}>
+              <li className="text-center text-2xl mx-5 my-5 p-10 rounded shadow-md overflow-hidden bg-gray-100" key={bench.id}>
                 <Link href={`/b/${bench.slug}`}>
                   <a>{bench.title}</a>
                 </Link>

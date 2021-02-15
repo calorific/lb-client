@@ -32,13 +32,16 @@ const Bench = ({ bench }) => {
       container: mapContainerRef.current || '',
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [lng, lat],
+      attributionControl: false,
       zoom: zoom,
     });
 
-    const marker = new mapboxgl.Marker().setLngLat([lng,lat]).addTo(map);
+    const marker = new mapboxgl.Marker({ color: "#94F59B" })
+      .setLngLat([lng, lat])
+      .addTo(map);
 
     // Add navigation control (the +/- zoom buttons)
-    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
 
     // Clean up on unmount
     return () => map.remove();
