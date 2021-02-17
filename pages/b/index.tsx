@@ -10,9 +10,7 @@ function BenchesIndex() {
     router.push("/", undefined, { shallow: true });
   }, []);
 
-  useEffect(() => {
-    // The counter changed!
-  }, [router.query]);
+  useEffect(() => {}, [router.query]);
   return null;
 }
 

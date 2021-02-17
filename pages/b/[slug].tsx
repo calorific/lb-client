@@ -5,18 +5,21 @@ import Nav from "../../components/nav";
 import mapboxgl from "mapbox-gl";
 
 const Bench = ({ bench }) => {
+  // convert what3words location to coordinates
   const api = require("@what3words/api");
   api.setOptions({ key: "ZHCEP0DY" });
   mapboxgl.accessToken =
     "pk.eyJ1IjoiZWRhcG0iLCJhIjoiY2tsM29kOWtzMTBvdzMwdDd2b3dtNHYxNiJ9.ZGBau9yxktkf-2G6p57eig";
   const data = api.convertToCoordinates(bench.location);
 
+  // initialize mapbox values  
   const mapContainerRef = useRef(null);
 
   const [lng, setLng] = useState(0);
   const [lat, setLat] = useState(0);
   const [zoom, setZoom] = useState(1);
 
+  // get coordinates from what3words promise
   async function getCoords() {
     const jason = await data;
     setLng(jason.coordinates.lng);
@@ -36,6 +39,7 @@ const Bench = ({ bench }) => {
       zoom: zoom,
     });
 
+    // add marker to map
     const marker = new mapboxgl.Marker({ color: "#94F59B" })
       .setLngLat([lng, lat])
       .addTo(map);
@@ -96,6 +100,7 @@ const Bench = ({ bench }) => {
   );
 };;
 
+// get paths for each bench
 export async function getStaticPaths() {
   const url = process.env.API_URL + "/benches";
   const res = await axios.get(url);
