@@ -8,7 +8,7 @@ const Nav = () => {
       <div className="text-2xl text-black font-semibold inline-flex items-center">
         <Link href="/">
           <a>
-            <span>Lunchbencher</span>
+            <span>Lunchbench</span>
           </a>
         </Link>
       </div>

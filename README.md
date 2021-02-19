@@ -1,3 +1,3 @@
-# Lunchbencher Client
+# Lunchbench Client
 
 Built with Next.js

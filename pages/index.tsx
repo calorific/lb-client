@@ -7,7 +7,7 @@ export default function Home({ benches }) {
   return (
     <div>
       <Head>
-        <title>Lunchbencher</title>
+        <title>Lunchbench</title>
       </Head>
       <Nav></Nav>
       <div>
