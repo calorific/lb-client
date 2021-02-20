@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest --watch"
   },
   "dependencies": {
     "@what3words/api": "^3.1.1",
@@ -24,6 +25,7 @@
     "tailwindcss": "^2.0.2"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.12.17",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.25",
     "@types/react": "^17.0.1",
