@@ -1,9 +1,22 @@
 import Link from "next/link";
-import axios from "axios";
 import Head from "next/head";
 import Nav from "../components/nav";
+import algoliasearch from "algoliasearch";
+import {
+  InstantSearch,
+  SearchBox,
+  Hits,
+  Pagination,
+  ClearRefinements,
+  RefinementList,
+  Configure,
+} from "react-instantsearch-dom";
 
-export default function Home({ benches }) {
+export default function Home() {
+  const searchClient = algoliasearch(
+    "ABAI9XLKZH",
+    "2cb13b4343e271e17d47ede4e2134914"
+  );
   return (
     <div>
       <Head>
@@ -11,30 +24,30 @@ export default function Home({ benches }) {
       </Head>
       <Nav></Nav>
       <div>
-        <ul>
-          {/* loop over the benches and show them */}
-          {benches &&
-            benches.map((bench) => (
-              <li className="text-center text-2xl mx-5 my-5 p-10 rounded shadow-md overflow-hidden bg-gray-100" key={bench.id}>
-                <Link href={`/b/${bench.slug}`}>
-                  <a>{bench.title}</a>
-                </Link>
-              </li>
-            ))}
-        </ul>
+        <InstantSearch
+          indexName="development_bench"
+          searchClient={searchClient}
+        >
+          <div>
+            <SearchBox
+              className="bg-gray-100 rounded text-center"
+              translations={{ placeholder: "Search for Benches..." }}
+            />
+          </div>
+          <div>
+            <Hits hitComponent={Hit} />
+          </div>
+        </InstantSearch>
       </div>
+      <div></div>
     </div>
   );
 }
 
-export async function getStaticProps() {
-  // get benches from our api
-  const url = process.env.API_URL + "/benches";
-  const res = await axios.get(url);
-  const benches = await res.data;
-
-  return {
-    props: { benches },
-  };
+const Hit = ({ hit }) => {
+  return (
+    <div className="text-center text-2xl mx-5 my-5 p-10 rounded shadow-md overflow-hidden bg-gray-100">
+      <Link href={`/b/${hit.slug}`}><h1>{hit.title}</h1></Link>
+    </div>
+  );
 }
-
