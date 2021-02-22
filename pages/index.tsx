@@ -13,9 +13,10 @@ import {
 } from "react-instantsearch-dom";
 
 export default function Home() {
+  const algolia_key = process.env.ALGOLIA_API_KEY;
   const searchClient = algoliasearch(
     "ABAI9XLKZH",
-    "2cb13b4343e271e17d47ede4e2134914"
+    algolia_key,
   );
   return (
     <div>

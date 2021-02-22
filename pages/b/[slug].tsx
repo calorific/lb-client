@@ -7,9 +7,11 @@ import mapboxgl from "mapbox-gl";
 const Bench = ({ bench }) => {
   // convert what3words location to coordinates
   const api = require("@what3words/api");
-  api.setOptions({ key: "ZHCEP0DY" });
-  mapboxgl.accessToken =
-    "pk.eyJ1IjoiZWRhcG0iLCJhIjoiY2tsM29kOWtzMTBvdzMwdDd2b3dtNHYxNiJ9.ZGBau9yxktkf-2G6p57eig";
+  const wtw_key = process.env.WTW_API_KEY;
+  const mapbox_key = process.env.MAPBOX_API_KEY; 
+  api.setOptions({ key: wtw_key });
+  console.log(wtw_key);
+  mapboxgl.accessToken = mapbox_key;
   const data = api.convertToCoordinates(bench.location);
 
   // initialize mapbox values  
