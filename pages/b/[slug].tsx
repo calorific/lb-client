@@ -2,15 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Head from "next/head";
 import Nav from "../../components/nav";
-import mapboxgl from "mapbox-gl";
+// import mapboxgl from "mapbox-gl";
 
 const Bench = ({ bench }) => {
   // convert what3words location to coordinates
   const api = require("@what3words/api");
-  const wtw_key = process.env.WTW_API_KEY;
-  const mapbox_key = process.env.MAPBOX_API_KEY; 
+  const mapboxgl = require("mapbox-gl");
+  const wtw_key = process.env.NEXT_PUBLIC_WTW_API_KEY;
+  const mapbox_key = process.env.NEXT_PUBLIC_MAPBOX_API_KEY; 
   api.setOptions({ key: wtw_key });
-  console.log(wtw_key);
   mapboxgl.accessToken = mapbox_key;
   const data = api.convertToCoordinates(bench.location);
 
