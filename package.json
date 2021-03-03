@@ -4,8 +4,8 @@
   "description": "Client for Lunchbench",
   "repository": "https://github.com/calorific/lb-client.git",
   "author": "Ed Mason <mynameisprivate3@gmail.com>",
-  "license": "Calorific",
-  "private": true,
+  "license": "MIT",
+  "private": false,
   "scripts": {
     "dev": "next",
     "build": "next build",
