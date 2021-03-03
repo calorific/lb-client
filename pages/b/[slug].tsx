@@ -2,34 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Head from "next/head";
 import Nav from "../../components/nav";
-// import mapboxgl from "mapbox-gl";
 
 const Bench = ({ bench }) => {
-  // convert what3words location to coordinates
-  const api = require("@what3words/api");
   const mapboxgl = require("mapbox-gl");
-  const wtw_key = process.env.NEXT_PUBLIC_WTW_API_KEY;
   const mapbox_key = process.env.NEXT_PUBLIC_MAPBOX_API_KEY; 
-  api.setOptions({ key: wtw_key });
   mapboxgl.accessToken = mapbox_key;
-  const data = api.convertToCoordinates(bench.location);
 
-  // initialize mapbox values  
+  // initialize mapbox values
   const mapContainerRef = useRef(null);
-
-  const [lng, setLng] = useState(0);
-  const [lat, setLat] = useState(0);
-  const [zoom, setZoom] = useState(1);
-
-  // get coordinates from what3words promise
-  async function getCoords() {
-    const jason = await data;
-    setLng(jason.coordinates.lng);
-    setLat(jason.coordinates.lat);
-    setZoom(15);
-  }
-
-    getCoords();
+  const lng = bench.coords.lng;
+  const lat = bench.coords.lat;
+  const zoom = 15;
 
   // Initialize map when component mounts
   useEffect(() => {
