@@ -8,7 +8,7 @@ This is the official web client for Lunchbench, an open api (coming soon!) which
 
 Lunchbench's API will allow everyone to contribute, either directly using something like Postman, or through a client (like this one). An app is also in the works, so stay tuned!
 
-All the parts of the project will be hosted under the GitHub organisation [Calorific](https://github.com/calorific).
+All the parts of the project will be hosted under the GitHub organisation [Lunchbench](https://github.com/lunchbench).
 
 <!-- ## Funding
 
