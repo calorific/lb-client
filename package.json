@@ -16,6 +16,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
+    "@mapbox/mapbox-gl-geocoder": "^4.7.0",
+    "@tailwindcss/forms": "^0.2.1",
     "@what3words/api": "^3.1.1",
     "algoliasearch": "^4.8.5",
     "autoprefixer": "^10.2.4",
