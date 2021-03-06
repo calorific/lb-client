@@ -46,20 +46,20 @@ const Bench = ({ bench }) => {
         />
       </Head>
       <Nav></Nav>
-      <div className="container mx-auto p-10">
-        <div className="max-w-full rounded overflow-hidden shadow-lg flex justify-between">
+      <div className="container p-10 mx-auto">
+        <div className="flex justify-between max-w-full overflow-hidden rounded shadow-lg">
           <div className="px-6 py-4">
-            <div className="font-bold text-5xl mb-2">{bench.title}</div>
+            <div className="mb-2 text-5xl font-bold">{bench.title}</div>
             <div className="px-6 pt-4 pb-2">
               <div>
                 {" "}
-                <span className="inline bg-red-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                  <strong>Category:</strong> {bench.category}
+                <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-red-200 rounded-full">
+                  <strong>Category:</strong> {bench.category.name}
                 </span>
-                <span className="inline bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                  <strong>Condition:</strong> {bench.condition}
+                <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-blue-200 rounded-full">
+                  <strong>Condition:</strong> {bench.condition.name}
                 </span>
-                <span className="inline bg-green-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-green-200 rounded-full">
                   <strong>Capacity:</strong> {bench.capacity}
                 </span>
               </div>
@@ -72,7 +72,7 @@ const Bench = ({ bench }) => {
               </span> */}
             </div>
             <div className="overflow-hidden p-3.5">
-              <p className="font-semibold text-gray-700 text-base">
+              <p className="text-base font-semibold text-gray-700">
                 {bench.description}
               </p>
             </div>

@@ -31,7 +31,7 @@ export default function Home() {
         >
           <div>
             <SearchBox
-              className="bg-gray-100 rounded text-center"
+              className="px-2 py-2 text-center rounded"
               translations={{ placeholder: "Search for Benches..." }}
             />
           </div>
@@ -47,7 +47,7 @@ export default function Home() {
 
 const Hit = ({ hit }) => {
   return (
-    <div className="text-center text-2xl mx-5 my-5 p-10 rounded shadow-md overflow-hidden bg-gray-100">
+    <div className="p-10 mx-5 my-5 overflow-hidden text-2xl text-center bg-gray-100 rounded shadow-md">
       <Link href={`/b/${hit.slug}`}><h1>{hit.title}</h1></Link>
     </div>
   );

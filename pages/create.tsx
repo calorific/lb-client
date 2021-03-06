@@ -5,21 +5,46 @@ import Head from "next/head";
 import Nav from "../components/nav";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 
-const CreatePage = () => {
+const CreatePage = ({allCategories, allConditions}) => {
   const mapboxgl = require("mapbox-gl");
   const mapbox_key = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
   mapboxgl.accessToken = mapbox_key;
+  const url = process.env.API_URL + "/benches";
 
+  const [modifiedData, setModifiedData] = useState({
+    name: '',
+    description: '',
+    category: '',
+    condition: '',
+    capacity: '',
+    location: '',
+    coords: [],
+  });
+  
+  const handleChange = ({ target: { name, value } }) => {
+    setModifiedData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const response = await axios.post(url, modifiedData);
+    console.log(response);
+  };
+  
   // initialize mapbox values
   const mapContainerRef = useRef(null);
-  const zoom = 0;
+  const zoom = 2;
 
   // Initialize map when component mounts
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current || "",
       style: "mapbox://styles/mapbox/outdoors-v11",
-      center: [0, 0],
+      center: [-0.118092, 51.509865],
       attributionControl: false,
       zoom: zoom,
     });
@@ -28,51 +53,21 @@ const CreatePage = () => {
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
-      marker: false,
-      placeholder: "Search...",
+      marker: true,
       collapsed: true,
     });
-
+    
     // Add geocoder
     map.addControl(geocoder);
 
-    // Add navigation control (the +/- zoom buttons)
+    // Add navigation and fullscreen controls
     map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
-
-    // After the map style has loaded on the page,
-    // add a source layer and default styling for a single point
-    map.on("load", function () {
-      map.addSource("single-point", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [],
-        },
-      });
-
-      map.addLayer({
-        id: "point",
-        source: "single-point",
-        type: "circle",
-        paint: {
-          "circle-radius": 10,
-          "circle-color": "#448ee4",
-        },
-      });
-
-      // Listen for the `result` event from the Geocoder
-      // `result` event is triggered when a user makes a selection
-      //  Add a marker at the result's coordinates
-      geocoder.on("result", function (e) {
-        map.getSource("single-point").setData(e.result.geometry);
-      });
-    });
+    map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
 
     // Clean up on unmount
     return () => map.remove();
   }, [zoom]);
 
-  const url = process.env.API_URL;
   return (
     <div>
       <Head>
@@ -90,34 +85,38 @@ const CreatePage = () => {
       </Head>
       <div>
         <Nav></Nav>
-        <div className="grid grid-cols-1 gap-6 py-5 px-5">
-          <form action={`${url}/benches`} method="post">
+        <div className="grid grid-cols-1 gap-6 px-5 py-5">
+          <form onSubmit={handleSubmit}>
             <div className="block">
-              <label className="text-gray-700 text-xl font-semibold">
+              <label className="text-xl font-semibold text-gray-700">
                 Title
               </label>
               <input
-                className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+                className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                 type="text"
                 name="title"
+                value={modifiedData.name}
+                onChange={handleChange}
               />
             </div>
             <div className="block">
-              <label className="text-gray-700 text-xl font-semibold">
+              <label className="text-xl font-semibold text-gray-700">
                 Description
               </label>
               <textarea
-                className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+                className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                 name="description"
+                value={modifiedData.description}
+                onChange={handleChange}
               />
             </div>
             <div className="block">
-              <label className="text-gray-700 text-xl font-semibold">
+              <label className="text-xl font-semibold text-gray-700">
                 Category
               </label>
               <select
                 name="category"
-                className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+                className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
               >
                 <option value="bench">Bench</option>
                 <option value="spot">Spot</option>
@@ -125,12 +124,12 @@ const CreatePage = () => {
               </select>
             </div>
             <div className="block">
-              <label className="text-gray-700 text-xl font-semibold">
+              <label className="text-xl font-semibold text-gray-700">
                 Condition
               </label>
               <select
                 name="condition"
-                className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+                className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
               >
                 <option value="spiffing">Spiffing</option>
                 <option value="okay">Okay</option>
@@ -138,10 +137,10 @@ const CreatePage = () => {
               </select>
             </div>
             <br />
-            <div className="h-96 w-auto" ref={mapContainerRef} />
+            <div className="w-auto h-96" ref={mapContainerRef} />
             <br />
             <button
-              className="bg-primary block rounded border-gray-700 text-xl py-1 px-5 w-full"
+              className="block w-full px-5 py-1 text-xl border-gray-700 rounded bg-primary"
               type="submit"
             >
               Create Bench
@@ -152,5 +151,19 @@ const CreatePage = () => {
     </div>
   );
 };
+
+export async function getStaticCategories() {
+  const url = process.env.API_URL;
+  const res = await axios.get(`${url}/categories`);
+  const {allCategories} = await res.data;
+  return {allCategories};
+}
+
+export async function getStaticConditions() {
+  const url = process.env.API_URL;
+  const res = await axios.get(`${url}/conditions`);
+  const { allConditions } = await res.data;
+  return { allConditions };
+}
 
 export default CreatePage;

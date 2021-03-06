@@ -1,12 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 // navbar built with tailwind
 const Nav = () => {
   return (
-    <div className="flex bg-tertiary bg-opacity-90 shadow-lg px-12 py-4 mx-auto text-2xl text-black font-semibold">
+    <div className="flex px-12 py-4 mx-auto text-2xl font-semibold text-black shadow-lg bg-tertiary bg-opacity-90">
       <div className="order-first mr-auto">
         <Link href="/">
           <a>
@@ -14,10 +12,10 @@ const Nav = () => {
           </a>
         </Link>
       </div>
-      <div className="order-last ml-auto rounded border-gray-400 text-base">
+      <div className="order-last px-2 py-1 ml-auto text-base rounded bg-primary">
         <Link href="/create">
           <a>
-            <FontAwesomeIcon icon={faPlusCircle} /> Create
+            + Create
           </a>
         </Link>
       </div>
