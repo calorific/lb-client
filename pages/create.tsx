@@ -35,7 +35,7 @@ const CreatePage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     const geodata = modifiedData.coords;
-    const data = api.convertto3wa({geodata});
+    const data = api.convertTo3wa({geodata});
 
     async function getAddress() {
       const jason = await data;
