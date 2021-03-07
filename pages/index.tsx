@@ -7,6 +7,7 @@ import {
   SearchBox,
   Hits,
   RefinementList,
+  ClearRefinements,
   Pagination,
   NumericMenu
 } from "react-instantsearch-dom";
@@ -38,7 +39,7 @@ export default function Home() {
               translations={{ placeholder: "Search for Benches..." }}
             />
           </div>
-          <div className="grid grid-cols-3 px-5 py-2">
+          <div className="grid items-center grid-cols-3 px-5 py-2 justify-items-center">
             <div>
               <h3>Category</h3>
               <RefinementList attribute="category.name" />
@@ -59,6 +60,9 @@ export default function Home() {
                 ]}
               />
             </div>
+          </div>
+          <div>
+            <ClearRefinements />
           </div>
           <div>
             <Hits hitComponent={Hit} />

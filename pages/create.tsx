@@ -5,20 +5,23 @@ import Head from "next/head";
 import Nav from "../components/nav";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 
-const CreatePage = ({allCategories, allConditions}) => {
+const CreatePage = () => {
   const mapboxgl = require("mapbox-gl");
+  const api = require("@what3words/api");
   const mapbox_key = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
+  const wtw_key = process.env.NEXT_PUBLIC_WTW_API_KEY;
   mapboxgl.accessToken = mapbox_key;
+  api.setOptions({ key: wtw_key });
   const url = process.env.API_URL + "/benches";
-  console.log({allCategories, allConditions});
 
   const [modifiedData, setModifiedData] = useState({
-    name: '',
+    title: '',
     description: '',
     category: '',
     condition: '',
     capacity: '',
     location: '',
+    slug: '',
     coords: [],
   });
   
@@ -31,6 +34,22 @@ const CreatePage = ({allCategories, allConditions}) => {
   
   const handleSubmit = async e => {
     e.preventDefault();
+    const geodata = modifiedData.coords;
+    const data = api.convertto3wa({geodata});
+
+    async function getAddress() {
+      const jason = await data;
+      setModifiedData((prev) => ({
+        ...prev,
+        location: jason.words,
+      }));
+    }
+    
+    getAddress();
+    setModifiedData((prev) => ({
+      ...prev,
+      slug: modifiedData.location.replace(".", "-"),
+    }));
 
     const response = await axios.post(url, modifiedData);
     console.log(response);
@@ -54,8 +73,7 @@ const CreatePage = ({allCategories, allConditions}) => {
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
-      marker: true,
-      collapsed: true,
+      marker: {color: "#94F59B"},
     });
     
     // Add geocoder
@@ -65,6 +83,13 @@ const CreatePage = ({allCategories, allConditions}) => {
     map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
     map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
 
+    geocoder.on('result', function(result) {
+      setModifiedData((prev) => ({
+      ...prev,
+      coords: result.result.center,
+    }));
+    })
+    
     // Clean up on unmount
     return () => map.remove();
   }, [zoom]);
@@ -96,7 +121,7 @@ const CreatePage = ({allCategories, allConditions}) => {
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                 type="text"
                 name="title"
-                value={modifiedData.name}
+                value={modifiedData.title}
                 onChange={handleChange}
               />
             </div>
@@ -119,9 +144,9 @@ const CreatePage = ({allCategories, allConditions}) => {
                 name="category"
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
               >
-                {allCategories.map((category) => (
-                  <option value={category}>{category}</option>
-                ))}
+                <option value="bench">Bench</option>
+                <option value="spot">Spot</option>
+                <option value="area">Area</option>
               </select>
             </div>
             <div className="block">
@@ -132,10 +157,22 @@ const CreatePage = ({allCategories, allConditions}) => {
                 name="condition"
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
               >
-                {allConditions.map((condition) => (
-                  <option value={condition}>{condition}</option>
-                ))}
+                <option value="spiffing">Spiffing</option>
+                <option value="okay">Okay</option>
+                <option value="appalling">Appalling</option>
               </select>
+            </div>
+            <div className="block">
+              <label className="text-xl font-semibold text-gray-700">
+                Capacity
+              </label>
+              <input
+                className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
+                type="number"
+                name="capacity"
+                value={modifiedData.capacity}
+                onChange={handleChange}
+              />
             </div>
             <br />
             <div className="w-auto h-96" ref={mapContainerRef} />
@@ -152,14 +189,5 @@ const CreatePage = ({allCategories, allConditions}) => {
     </div>
   );
 };
-
-CreatePage.getInitialProps = async ctx => {
-  const url = process.env.API_URL;
-  const categories = await axios.get(`${url}/categories`);
-  const conditions = await axios.get(`${url}/conditions`);
-  const { allCategories } = await categories.data;
-  const { allConditions } = await conditions.data;
-  return { allCategories, allConditions };
-}
 
 export default CreatePage;
