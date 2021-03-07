@@ -10,6 +10,7 @@ const CreatePage = ({allCategories, allConditions}) => {
   const mapbox_key = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
   mapboxgl.accessToken = mapbox_key;
   const url = process.env.API_URL + "/benches";
+  console.log({allCategories, allConditions});
 
   const [modifiedData, setModifiedData] = useState({
     name: '',
@@ -118,9 +119,9 @@ const CreatePage = ({allCategories, allConditions}) => {
                 name="category"
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
               >
-                <option value="bench">Bench</option>
-                <option value="spot">Spot</option>
-                <option value="area">Area</option>
+                {allCategories.map((category) => (
+                  <option value={category}>{category}</option>
+                ))}
               </select>
             </div>
             <div className="block">
@@ -131,9 +132,9 @@ const CreatePage = ({allCategories, allConditions}) => {
                 name="condition"
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
               >
-                <option value="spiffing">Spiffing</option>
-                <option value="okay">Okay</option>
-                <option value="appalling">Appalling</option>
+                {allConditions.map((condition) => (
+                  <option value={condition}>{condition}</option>
+                ))}
               </select>
             </div>
             <br />
@@ -152,18 +153,13 @@ const CreatePage = ({allCategories, allConditions}) => {
   );
 };
 
-export async function getStaticCategories() {
+CreatePage.getInitialProps = async ctx => {
   const url = process.env.API_URL;
-  const res = await axios.get(`${url}/categories`);
-  const {allCategories} = await res.data;
-  return {allCategories};
-}
-
-export async function getStaticConditions() {
-  const url = process.env.API_URL;
-  const res = await axios.get(`${url}/conditions`);
-  const { allConditions } = await res.data;
-  return { allConditions };
+  const categories = await axios.get(`${url}/categories`);
+  const conditions = await axios.get(`${url}/conditions`);
+  const { allCategories } = await categories.data;
+  const { allConditions } = await conditions.data;
+  return { allCategories, allConditions };
 }
 
 export default CreatePage;

@@ -52,7 +52,6 @@ const Bench = ({ bench }) => {
             <div className="mb-2 text-5xl font-bold">{bench.title}</div>
             <div className="px-6 pt-4 pb-2">
               <div>
-                {" "}
                 <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-red-200 rounded-full">
                   <strong>Category:</strong> {bench.category.name}
                 </span>
