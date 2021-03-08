@@ -10,8 +10,8 @@ const Bench = ({ bench }) => {
 
   // initialize mapbox values
   const mapContainerRef = useRef(null);
-  const lng = bench.coords.lng;
-  const lat = bench.coords.lat;
+  const lng = bench.lng;
+  const lat = bench.lat;
   const zoom = 15;
 
   // Initialize map when component mounts

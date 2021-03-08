@@ -8,15 +8,15 @@ const Nav = () => {
       <div className="order-first mr-auto">
         <Link href="/">
           <a>
-            <span>Lunchbench</span>
+            <span>
+              <img className="h-8" src="lunchbench.png" alt="Lunchbench" />
+            </span>
           </a>
         </Link>
       </div>
       <div className="order-last px-2 py-1 ml-auto text-base rounded bg-primary">
         <Link href="/create">
-          <a>
-            + Create
-          </a>
+          <a>+ Create</a>
         </Link>
       </div>
     </div>

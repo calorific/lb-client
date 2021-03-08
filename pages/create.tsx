@@ -14,15 +14,20 @@ const CreatePage = () => {
   api.setOptions({ key: wtw_key });
   const url = process.env.API_URL + "/benches";
 
+  const [geodata, setGeodata] = useState({
+    coords: [],
+  });
+
   const [modifiedData, setModifiedData] = useState({
     title: '',
     description: '',
     category: '',
     condition: '',
-    capacity: '',
+    capacity: 0,
     location: '',
     slug: '',
-    coords: [],
+    lng: 0,
+    lat: 0,
   });
   
   const handleChange = ({ target: { name, value } }) => {
@@ -34,9 +39,14 @@ const CreatePage = () => {
   
   const handleSubmit = async e => {
     e.preventDefault();
-    const geodata = modifiedData.coords;
-    const data = api.convertTo3wa({geodata});
+    const data = api.convertTo3wa({lat: modifiedData.lat, lng: modifiedData.lng});
 
+    setModifiedData((prev) => ({
+      ...prev,
+      lng: geodata.coords[0],
+      lat: geodata.coords[1],
+    }));
+    
     async function getAddress() {
       const jason = await data;
       setModifiedData((prev) => ({
@@ -50,9 +60,10 @@ const CreatePage = () => {
       ...prev,
       slug: modifiedData.location.replace(".", "-"),
     }));
+    console.log(modifiedData);
 
-    const response = await axios.post(url, modifiedData);
-    console.log(response);
+    //const response = await axios.post(url, modifiedData);
+    //console.log(response);
   };
   
   // initialize mapbox values
@@ -83,12 +94,12 @@ const CreatePage = () => {
     map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
     map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
 
-    geocoder.on('result', function(result) {
-      setModifiedData((prev) => ({
-      ...prev,
-      coords: result.result.center,
-    }));
-    })
+    geocoder.on("result", function (result) {
+      setGeodata((prev) => ({
+        ...prev,
+        coords: result.result.center,
+      }));
+    });
     
     // Clean up on unmount
     return () => map.remove();
@@ -143,6 +154,7 @@ const CreatePage = () => {
               <select
                 name="category"
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
+                onChange={handleChange}
               >
                 <option value="bench">Bench</option>
                 <option value="spot">Spot</option>
@@ -156,6 +168,7 @@ const CreatePage = () => {
               <select
                 name="condition"
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
+                onChange={handleChange}
               >
                 <option value="spiffing">Spiffing</option>
                 <option value="okay">Okay</option>
