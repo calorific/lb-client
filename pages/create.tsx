@@ -14,17 +14,12 @@ const CreatePage = () => {
   api.setOptions({ key: wtw_key });
   const url = process.env.API_URL + "/benches";
 
-  const [geodata, setGeodata] = useState({
-    coords: [],
-  });
-
   const [modifiedData, setModifiedData] = useState({
     title: '',
     description: '',
     category: '',
     condition: '',
     capacity: 0,
-    location: '',
     slug: '',
     lng: 0,
     lat: 0,
@@ -39,27 +34,17 @@ const CreatePage = () => {
   
   const handleSubmit = async e => {
     e.preventDefault();
-    const data = api.convertTo3wa({lat: modifiedData.lat, lng: modifiedData.lng});
-
-    setModifiedData((prev) => ({
-      ...prev,
-      lng: geodata.coords[0],
-      lat: geodata.coords[1],
-    }));
+    const data = api.convertTo3wa({lat: modifiedData.lat, lng: modifiedData.lng}, 'en');
     
     async function getAddress() {
       const jason = await data;
       setModifiedData((prev) => ({
         ...prev,
-        location: jason.words,
+        slug: jason.words.replace(".", "-"),
       }));
-    }
+    };
     
     getAddress();
-    setModifiedData((prev) => ({
-      ...prev,
-      slug: modifiedData.location.replace(".", "-"),
-    }));
     console.log(modifiedData);
 
     //const response = await axios.post(url, modifiedData);
@@ -95,15 +80,16 @@ const CreatePage = () => {
     map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
 
     geocoder.on("result", function (result) {
-      setGeodata((prev) => ({
+      setModifiedData((prev) => ({
         ...prev,
-        coords: result.result.center,
-      }));
+        lng: result.result.center[0],
+        lat: result.result.center[1],
+      }))
     });
     
     // Clean up on unmount
     return () => map.remove();
-  }, [zoom]);
+  }, []);
 
   return (
     <div>
