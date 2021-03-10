@@ -34,18 +34,13 @@ const CreatePage = () => {
   
   const handleSubmit = async e => {
     e.preventDefault();
-    const data = api.convertTo3wa({lat: modifiedData.lat, lng: modifiedData.lng}, 'en');
-    
-    async function getAddress() {
-      const jason = await data;
+    api.convertTo3wa({lat: modifiedData.lat, lng: modifiedData.lng}, 'en')
+    .then(function(getSlug) {
       setModifiedData((prev) => ({
         ...prev,
-        slug: jason.words.replace(".", "-"),
+        slug: getSlug.words,
       }));
-    };
-    
-    getAddress();
-    console.log(modifiedData);
+    });
 
     //const response = await axios.post(url, modifiedData);
     //console.log(response);
