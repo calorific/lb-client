@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import Nav from "../components/nav";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
@@ -13,17 +13,20 @@ const CreatePage = () => {
   mapboxgl.accessToken = mapbox_key;
   api.setOptions({ key: wtw_key });
   const url = process.env.API_URL + "/benches";
+  const router = useRouter();
 
   const [modifiedData, setModifiedData] = useState({
     title: '',
     description: '',
-    category: '',
-    condition: '',
+    category: 1,
+    condition: 1,
     capacity: 0,
     slug: '',
     lng: 0,
     lat: 0,
   });
+
+  const DataRef = useRef(modifiedData);
   
   const handleChange = ({ target: { name, value } }) => {
     setModifiedData((prev) => ({
@@ -31,25 +34,28 @@ const CreatePage = () => {
       [name]: value,
     }));
   };
+
+  const handleNumChange = ({ target: { name, value } }) => {
+    setModifiedData((prev) => ({
+      ...prev,
+      [name]: parseInt(value),
+    }));
+  };
   
   const handleSubmit = async e => {
     e.preventDefault();
-    api.convertTo3wa({lat: modifiedData.lat, lng: modifiedData.lng}, 'en')
-    .then(function(getSlug) {
-      setModifiedData((prev) => ({
-        ...prev,
-        slug: getSlug.words,
-      }));
-    });
 
-    //const response = await axios.post(url, modifiedData);
-    //console.log(response);
+    setModifiedData(DataRef.current);
+    console.log(modifiedData);
+
+    const response = await axios.post(url, modifiedData);
+    router.push("/");
   };
   
   // initialize mapbox values
   const mapContainerRef = useRef(null);
   const zoom = 2;
-
+  
   // Initialize map when component mounts
   useEffect(() => {
     const map = new mapboxgl.Map({
@@ -59,6 +65,13 @@ const CreatePage = () => {
       attributionControl: false,
       zoom: zoom,
     });
+
+    setModifiedData((prev) => ({
+      ...prev,
+      lng: 0,
+      lat: 0,
+      slug: ''
+    }));
 
     // Initialize geocoder
     const geocoder = new MapboxGeocoder({
@@ -79,12 +92,20 @@ const CreatePage = () => {
         ...prev,
         lng: result.result.center[0],
         lat: result.result.center[1],
-      }))
+      }));
+      api
+        .convertTo3wa({ lat: modifiedData.lat, lng: modifiedData.lng }, "en")
+        .then(function (getSlug) {
+          setModifiedData((prev) => ({
+            ...prev,
+            slug: getSlug.words.replace(".", "-").replace(".", "-"),
+          }));
+        });
     });
     
     // Clean up on unmount
     return () => map.remove();
-  }, []);
+  }, [zoom]);
 
   return (
     <div>
@@ -137,9 +158,10 @@ const CreatePage = () => {
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                 onChange={handleChange}
               >
-                <option value="bench">Bench</option>
-                <option value="spot">Spot</option>
-                <option value="area">Area</option>
+                <option value={1}>Bench</option>
+                <option value={2}>Spot</option>
+                <option value={3}>Area</option>
+                <option value={4}>Park</option>
               </select>
             </div>
             <div className="block">
@@ -151,9 +173,9 @@ const CreatePage = () => {
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                 onChange={handleChange}
               >
-                <option value="spiffing">Spiffing</option>
-                <option value="okay">Okay</option>
-                <option value="appalling">Appalling</option>
+                <option value={1}>Spiffing</option>
+                <option value={2}>Okay</option>
+                <option value={3}>Appalling</option>
               </select>
             </div>
             <div className="block">
@@ -165,7 +187,7 @@ const CreatePage = () => {
                 type="number"
                 name="capacity"
                 value={modifiedData.capacity}
-                onChange={handleChange}
+                onChange={handleNumChange}
               />
             </div>
             <br />
