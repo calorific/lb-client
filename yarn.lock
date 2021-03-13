@@ -1043,11 +1043,6 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@what3words/api@^3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@what3words/api/-/api-3.1.1.tgz#1873fb3ad3cd2379d3e51863810a708216a6ba3c"
-  integrity sha512-4+W6BTk8J/1mC/CMNxgDza26MvV3wHPvH87TBogAEffKfy64JFvvUSGkdJgQUXBipBpK/c3DYeNJUuTqML6k0Q==
-
 abab@^2.0.3:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.5.tgz#c0b678fb32d60fc1219c784d6a826fe385aeb79a"

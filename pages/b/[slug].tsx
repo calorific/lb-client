@@ -53,10 +53,10 @@ const Bench = ({ bench }) => {
             <div className="px-6 pt-4 pb-2">
               <div>
                 <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-red-200 rounded-full">
-                  <strong>Category:</strong> {bench.category.name}
+                  <strong>Category:</strong> {bench.category}
                 </span>
                 <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-blue-200 rounded-full">
-                  <strong>Condition:</strong> {bench.condition.name}
+                  <strong>Condition:</strong> {bench.condition}
                 </span>
                 <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-green-200 rounded-full">
                   <strong>Capacity:</strong> {bench.capacity}

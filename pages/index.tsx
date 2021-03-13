@@ -42,11 +42,11 @@ export default function Home() {
           <div className="grid items-center grid-cols-3 px-5 py-2 justify-items-center">
             <div>
               <h3>Category</h3>
-              <RefinementList attribute="category.name" />
+              <RefinementList attribute="category" />
             </div>
             <div>
               <h3>Condition</h3>
-              <RefinementList attribute="condition.name" />
+              <RefinementList attribute="condition" />
             </div>
             <div>
               <h3>Capacity</h3>
@@ -93,10 +93,10 @@ const Hit = ({ hit }) => {
       </Link>
       <div>
         <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-red-200 rounded-full">
-          <strong>Category:</strong> {hit.category.name}
+          <strong>Category:</strong> {hit.category}
         </span>
         <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-blue-200 rounded-full">
-          <strong>Condition:</strong> {hit.condition.name}
+          <strong>Condition:</strong> {hit.condition}
         </span>
         <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-green-200 rounded-full">
           <strong>Capacity:</strong> {hit.capacity}

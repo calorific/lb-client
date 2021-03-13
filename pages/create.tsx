@@ -4,34 +4,38 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import Nav from "../components/nav";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import slugify from "../functions/slugify";
 
 const CreatePage = () => {
   const mapboxgl = require("mapbox-gl");
-  const api = require("@what3words/api");
   const mapbox_key = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
-  const wtw_key = process.env.NEXT_PUBLIC_WTW_API_KEY;
   mapboxgl.accessToken = mapbox_key;
-  api.setOptions({ key: wtw_key });
   const url = process.env.API_URL + "/benches";
   const router = useRouter();
 
   const [modifiedData, setModifiedData] = useState({
     title: '',
     description: '',
-    category: 1,
-    condition: 1,
+    category: 'bench',
+    condition: 'spiffing',
     capacity: 0,
     slug: '',
     lng: 0,
     lat: 0,
   });
-
-  const DataRef = useRef(modifiedData);
   
   const handleChange = ({ target: { name, value } }) => {
     setModifiedData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleTitleChange = ({ target: { name, value } }) => {
+    setModifiedData((prev) => ({
+      ...prev,
+      [name]: value,
+      slug: slugify(value),
     }));
   };
 
@@ -45,11 +49,10 @@ const CreatePage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    setModifiedData(DataRef.current);
     console.log(modifiedData);
 
     const response = await axios.post(url, modifiedData);
-    router.push("/");
+    router.push(`/b/${modifiedData.slug}`);
   };
   
   // initialize mapbox values
@@ -65,13 +68,6 @@ const CreatePage = () => {
       attributionControl: false,
       zoom: zoom,
     });
-
-    setModifiedData((prev) => ({
-      ...prev,
-      lng: 0,
-      lat: 0,
-      slug: ''
-    }));
 
     // Initialize geocoder
     const geocoder = new MapboxGeocoder({
@@ -93,14 +89,6 @@ const CreatePage = () => {
         lng: result.result.center[0],
         lat: result.result.center[1],
       }));
-      api
-        .convertTo3wa({ lat: modifiedData.lat, lng: modifiedData.lng }, "en")
-        .then(function (getSlug) {
-          setModifiedData((prev) => ({
-            ...prev,
-            slug: getSlug.words.replace(".", "-").replace(".", "-"),
-          }));
-        });
     });
     
     // Clean up on unmount
@@ -135,7 +123,7 @@ const CreatePage = () => {
                 type="text"
                 name="title"
                 value={modifiedData.title}
-                onChange={handleChange}
+                onChange={handleTitleChange}
               />
             </div>
             <div className="block">
@@ -158,10 +146,10 @@ const CreatePage = () => {
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                 onChange={handleChange}
               >
-                <option value={1}>Bench</option>
-                <option value={2}>Spot</option>
-                <option value={3}>Area</option>
-                <option value={4}>Park</option>
+                <option value="bench">Bench</option>
+                <option value="spot">Spot</option>
+                <option value="area">Area</option>
+                <option value="park">Park</option>
               </select>
             </div>
             <div className="block">
@@ -173,9 +161,9 @@ const CreatePage = () => {
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                 onChange={handleChange}
               >
-                <option value={1}>Spiffing</option>
-                <option value={2}>Okay</option>
-                <option value={3}>Appalling</option>
+                <option value="spiffing">Spiffing</option>
+                <option value="okay">Okay</option>
+                <option value="appalling">Appalling</option>
               </select>
             </div>
             <div className="block">

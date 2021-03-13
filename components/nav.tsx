@@ -9,7 +9,7 @@ const Nav = () => {
         <Link href="/">
           <a>
             <span>
-              <img className="h-8" src="lunchbench.png" alt="Lunchbench" />
+              <img className="h-8" src="/lunchbench.png" alt="Lunchbench" />
             </span>
           </a>
         </Link>
