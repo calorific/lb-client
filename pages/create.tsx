@@ -73,8 +73,10 @@ const CreatePage = () => {
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
-      marker: {color: "#94F59B"},
+      marker: false,
     });
+
+    const marker = new mapboxgl.Marker({ color: "#94F59B", draggable: true });
     
     // Add geocoder
     map.addControl(geocoder);
@@ -83,13 +85,19 @@ const CreatePage = () => {
     map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
     map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
 
-    geocoder.on("result", function (result) {
+    geocoder.on("result", function(result) {
+      marker.setLngLat([result.result.center[0], result.result.center[1]]).addTo(map);
+    });
+    
+    marker.on("dragend", function(result) {
       setModifiedData((prev) => ({
         ...prev,
-        lng: result.result.center[0],
-        lat: result.result.center[1],
+        lng: result.target._lngLat.lng,
+        lat: result.target._lngLat.lat,
       }));
     });
+
+    
     
     // Clean up on unmount
     return () => map.remove();
