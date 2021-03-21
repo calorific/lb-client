@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import axios from "axios";
 import Head from "next/head";
+import Link from "next/link";
 import Nav from "../../components/nav";
 
 const Bench = ({ bench }) => {
@@ -61,14 +62,10 @@ const Bench = ({ bench }) => {
                 <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-green-200 rounded-full">
                   <strong>Capacity:</strong> {bench.capacity}
                 </span>
+                <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-white bg-gray-700 rounded-full">
+                  <strong><Link href={`/edit/${bench.slug}`}><a>Edit</a></Link></strong>
+                </span>
               </div>
-              {/*<span>
-                <img
-                  className="max-h-0.5 rounded-lg shadow-lg mb-3.5"
-                  src={process.env.API_URL + bench.images[0].url}
-                  alt="Bench"
-                ></img>
-              </span> */}
             </div>
             <div className="overflow-hidden p-3.5">
               <p className="text-base font-semibold text-gray-700">

@@ -101,6 +101,13 @@ const Hit = ({ hit }) => {
         <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-gray-700 bg-green-200 rounded-full">
           <strong>Capacity:</strong> {hit.capacity}
         </span>
+        <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-white bg-gray-700 rounded-full">
+          <strong>
+            <Link href={`/edit/${hit.slug}`}>
+              <a>Edit</a>
+            </Link>
+          </strong>
+        </span>
       </div>
     </div>
   );

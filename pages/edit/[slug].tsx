@@ -2,27 +2,18 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import Nav from "../components/nav";
+import Nav from "../../components/nav";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
-import slugify from "../functions/slugify";
+import slugify from "../../functions/slugify";
 
-const CreatePage = () => {
+const EditPage = ({ bench }) => {
   const mapboxgl = require("mapbox-gl");
   const mapbox_key = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
   mapboxgl.accessToken = mapbox_key;
-  const url = process.env.API_URL + "/benches";
+  const url = process.env.API_URL + "/benches/" + bench.id;
   const router = useRouter();
 
-  const [modifiedData, setModifiedData] = useState({
-    title: '',
-    description: '',
-    category: 'bench',
-    condition: 'spiffing',
-    capacity: 0,
-    slug: '',
-    lng: 0,
-    lat: 0,
-  });
+  const [modifiedData, setModifiedData] = useState(bench);
   
   const handleChange = ({ target: { name, value } }) => {
     setModifiedData((prev) => ({
@@ -51,20 +42,20 @@ const CreatePage = () => {
 
     console.log(modifiedData);
 
-    const response = await axios.post(url, modifiedData);
+    const response = await axios.put(url, modifiedData);
     router.push(`/b/${modifiedData.slug}`);
   };
   
   // initialize mapbox values
   const mapContainerRef = useRef(null);
-  const zoom = 2;
+  const zoom = 15;
   
   // Initialize map when component mounts
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current || "",
       style: "mapbox://styles/mapbox/outdoors-v11",
-      center: [-0.118092, 51.509865],
+      center: [bench.lng, bench.lat],
       attributionControl: false,
       zoom: zoom,
     });
@@ -76,7 +67,7 @@ const CreatePage = () => {
       marker: false,
     });
 
-    const marker = new mapboxgl.Marker({ color: "#94F59B", draggable: true });
+    const marker = new mapboxgl.Marker({ color: "#94F59B", draggable: true }).setLngLat([bench.lng, bench.lat]).addTo(map);
     
     // Add geocoder
     map.addControl(geocoder);
@@ -86,7 +77,7 @@ const CreatePage = () => {
     map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
 
     geocoder.on("result", function(result) {
-      marker.setLngLat([result.result.center[0], result.result.center[1]]).addTo(map);
+      marker.setLngLat([result.result.center[0], result.result.center[1]]);
       setModifiedData((prev) => ({
         ...prev,
         lng: result.result.center[0],
@@ -198,7 +189,7 @@ const CreatePage = () => {
               className="block w-full px-5 py-1 text-xl border-gray-700 rounded bg-primary"
               type="submit"
             >
-              Create Bench
+              Update Bench
             </button>
           </form>
         </div>
@@ -207,4 +198,34 @@ const CreatePage = () => {
   );
 };
 
-export default CreatePage;
+// get paths for each bench
+export async function getStaticPaths() {
+  const url = process.env.API_URL + "/benches";
+  const res = await axios.get(url);
+  const benches = res.data;
+
+  const paths = benches.map((bench) => ({
+    params: { slug: bench.slug },
+  }));
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+// for each individual page: get the data for that page
+export async function getStaticProps({ params }) {
+  const { slug } = params;
+
+  const url = process.env.API_URL;
+  const res = await axios.get(`${url}/benches?slug=${slug}`);
+  const data = await res.data;
+  const bench = data[0];
+
+  return {
+    props: { bench },
+  };
+}
+
+export default EditPage;
