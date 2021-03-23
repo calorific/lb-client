@@ -195,7 +195,7 @@ const CreatePage = () => {
             <div className="w-auto h-96" ref={mapContainerRef} />
             <br />
             <button
-              className="block w-full px-5 py-1 text-xl border-gray-700 rounded bg-primary"
+              className="block w-full px-5 py-1 text-xl border-gray-700 rounded bg-secondary"
               type="submit"
             >
               Create Bench
