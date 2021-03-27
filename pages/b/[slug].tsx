@@ -108,6 +108,7 @@ export async function getStaticProps({ params }) {
 
   return {
     props: { bench },
+    revalidate: 60
   };
 }
 

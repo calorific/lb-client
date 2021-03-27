@@ -14,6 +14,7 @@ import {
 
 export default function Home() {
   const algolia_key = process.env.NEXT_PUBLIC_ALGOLIA_API_KEY;
+  const algolia_index = process.env.NEXT_PUBLIC_ALGOLIA_INDEX;
   const searchClient = algoliasearch(
     "ABAI9XLKZH",
     algolia_key!,
@@ -30,7 +31,7 @@ export default function Home() {
       <Nav></Nav>
       <div>
         <InstantSearch
-          indexName="development_bench"
+          indexName={algolia_index!}
           searchClient={searchClient}
         >
           <div>

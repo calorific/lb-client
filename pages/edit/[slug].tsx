@@ -153,7 +153,6 @@ const EditPage = ({ bench }) => {
                 <option value="bench">Bench</option>
                 <option value="spot">Spot</option>
                 <option value="area">Area</option>
-                <option value="park">Park</option>
               </select>
             </div>
             <div className="block">
@@ -225,6 +224,7 @@ export async function getStaticProps({ params }) {
 
   return {
     props: { bench },
+    revalidate: 60
   };
 }
 

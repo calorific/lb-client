@@ -162,7 +162,6 @@ const CreatePage = () => {
                 <option value="bench">Bench</option>
                 <option value="spot">Spot</option>
                 <option value="area">Area</option>
-                <option value="park">Park</option>
               </select>
             </div>
             <div className="block">
