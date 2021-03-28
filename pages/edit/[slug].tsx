@@ -12,7 +12,7 @@ const EditPage = ({ bench }) => {
   mapboxgl.accessToken = mapbox_key;
   const url = process.env.API_URL + "/benches/" + bench.id;
   const router = useRouter();
-
+  
   const [modifiedData, setModifiedData] = useState(bench);
   
   const handleChange = ({ target: { name, value } }) => {
@@ -219,12 +219,12 @@ export async function getStaticProps({ params }) {
 
   const url = process.env.API_URL;
   const res = await axios.get(`${url}/benches?slug=${slug}`);
-  const data = await res.data;
+  const data = await res.data;  
   const bench = data[0];
 
   return {
     props: { bench },
-    revalidate: 60
+    revalidate: 1
   };
 }
 

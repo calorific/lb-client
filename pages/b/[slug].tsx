@@ -2,12 +2,26 @@ import React, { useEffect, useRef } from "react";
 import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import Nav from "../../components/nav";
 
 const Bench = ({ bench }) => {
   const mapboxgl = require("mapbox-gl");
-  const mapbox_key = process.env.NEXT_PUBLIC_MAPBOX_API_KEY; 
+  const mapbox_key = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
   mapboxgl.accessToken = mapbox_key;
+  const router = useRouter();
+  
+  if (router.isFallback) {
+    return (
+      <div>
+        <Head>
+          <title>Loading...</title>
+        </Head>
+        <Nav></Nav>
+        <h1 className="text-2xl text-center">Loading...</h1>
+      </div>
+    );
+  }
 
   // initialize mapbox values
   const mapContainerRef = useRef(null);
@@ -18,7 +32,7 @@ const Bench = ({ bench }) => {
   // Initialize map when component mounts
   useEffect(() => {
     const map = new mapboxgl.Map({
-      container: mapContainerRef.current || '',
+      container: mapContainerRef.current || "",
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [lng, lat],
       attributionControl: false,
@@ -63,7 +77,11 @@ const Bench = ({ bench }) => {
                   <strong>Capacity:</strong> {bench.capacity}
                 </span>
                 <span className="inline px-3 py-1 mb-2 mr-2 text-sm font-semibold text-white bg-gray-700 rounded-full">
-                  <strong><Link href={`/edit/${bench.slug}`}><a>Edit</a></Link></strong>
+                  <strong>
+                    <Link href={`/edit/${bench.slug}`}>
+                      <a>Edit</a>
+                    </Link>
+                  </strong>
                 </span>
               </div>
             </div>
@@ -79,7 +97,7 @@ const Bench = ({ bench }) => {
       </div>
     </div>
   );
-};;
+};;;
 
 // get paths for each bench
 export async function getStaticPaths() {
@@ -93,7 +111,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 }
 
@@ -104,11 +122,21 @@ export async function getStaticProps({ params }) {
   const url = process.env.API_URL;
   const res = await axios.get(`${url}/benches?slug=${slug}`);
   const data = await res.data;
+
+  if (!data) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
   const bench = data[0];
 
   return {
     props: { bench },
-    revalidate: 60
+    revalidate: 1
   };
 }
 
