@@ -10,10 +10,22 @@ const EditPage = ({ bench }) => {
   const mapboxgl = require("mapbox-gl");
   const mapbox_key = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
   mapboxgl.accessToken = mapbox_key;
-  const url = process.env.API_URL + "/benches/" + bench.id;
   const router = useRouter();
+
+  if (router.isFallback) {
+    return (
+      <div>
+        <Head>
+          <title>Loading...</title>
+        </Head>
+        <Nav></Nav>
+        <h1 className="text-2xl text-center">Loading...</h1>
+      </div>
+    );
+  }
   
   const [modifiedData, setModifiedData] = useState(bench);
+  const put = process.env.API_URL + "/benches/" + modifiedData.id;
   
   const handleChange = ({ target: { name, value } }) => {
     setModifiedData((prev) => ({
@@ -42,7 +54,7 @@ const EditPage = ({ bench }) => {
 
     console.log(modifiedData);
 
-    const response = await axios.put(url, modifiedData);
+    const response = await axios.put(put, modifiedData);
     router.push(`/b/${modifiedData.slug}`);
   };
   
@@ -209,7 +221,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 }
 
@@ -219,8 +231,17 @@ export async function getStaticProps({ params }) {
 
   const url = process.env.API_URL;
   const res = await axios.get(`${url}/benches?slug=${slug}`);
-  const data = await res.data;  
-  const bench = data[0];
+  const data = await res.data;
+  const bench = data[0];  
+
+  if (!data) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: { bench },
