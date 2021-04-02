@@ -13,19 +13,17 @@
     "test": "jest --watch"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
-    "@fortawesome/react-fontawesome": "^0.1.14",
     "@mapbox/mapbox-gl-geocoder": "^4.7.0",
-    "algoliasearch": "^4.8.5",
+    "algoliasearch": "^4.8.6",
     "autoprefixer": "^10.2.4",
     "axios": "^0.21.1",
     "mapbox-gl": "^2.1.1",
     "next": "^10.0.6",
     "postcss": "^8.2.4",
+    "qs": "^6.10.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-instantsearch-dom": "^6.9.0",
+    "react-instantsearch-dom": "^6.10.3",
     "tailwindcss": "^2.0.2"
   },
   "devDependencies": {

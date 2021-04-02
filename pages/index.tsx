@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Head from "next/head";
 import Nav from "../components/nav";
+import Footer from "../components/footer";
 import algoliasearch from "algoliasearch";
 import {
   InstantSearch,
@@ -72,15 +73,7 @@ export default function Home() {
             </div>
           </div>
         </InstantSearch>
-      </div>
-      <div className="flex w-full py-5">
-        <div className="relative justify-self-end algolia-logo">
-          <Link href="https://algolia.com">
-            <a>
-              <img src="algolia.svg" alt="algolia" />
-            </a>
-          </Link>
-        </div>
+        <Footer></Footer>
       </div>
     </div>
   );

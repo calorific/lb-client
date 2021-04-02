@@ -4,6 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Nav from "../../components/nav";
+import Footer from "../../components/footer";
 
 const Bench = ({ bench }) => {
   const mapboxgl = require("mapbox-gl");
@@ -95,6 +96,7 @@ const Bench = ({ bench }) => {
           <div className="h-96 w-96" ref={mapContainerRef} />
         </div>
       </div>
+      <Footer></Footer>
     </div>
   );
 };;;
