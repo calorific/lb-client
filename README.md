@@ -1,5 +1,7 @@
 # Lunchbench Web Client
 
+![Powered by Vercel](public/vercel.svg)
+
 This is the official web client for Lunchbench, an open api ([lunchbench/api](https://github.com/lunchbench/api)) which everyone will be allowed to contribute to, to help document picnicspots around the world. It is built with Next.js.
 
 ## More about the project

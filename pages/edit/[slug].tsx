@@ -161,6 +161,7 @@ const EditPage = ({ bench }) => {
                 name="category"
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                 onChange={handleChange}
+                defaultValue={modifiedData.category}
               >
                 <option value="bench">Bench</option>
                 <option value="spot">Spot</option>
@@ -175,6 +176,7 @@ const EditPage = ({ bench }) => {
                 name="condition"
                 className="block w-full px-2 py-2 mt-1 bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                 onChange={handleChange}
+                defaultValue={modifiedData.condition}
               >
                 <option value="spiffing">Spiffing</option>
                 <option value="okay">Okay</option>
