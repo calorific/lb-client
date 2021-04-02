@@ -115,7 +115,7 @@ const EditPage = ({ bench }) => {
   return (
     <div>
       <Head>
-        <title>Lunchbench - Create</title>
+        <title>Lunchbench - Edit</title>
         <link
           href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css"
           rel="stylesheet"
