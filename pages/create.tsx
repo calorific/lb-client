@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Nav from "../components/nav";
+import Footer from "../components/footer";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import slugify from "../functions/slugify";
 
@@ -202,6 +203,7 @@ const CreatePage = () => {
           </form>
         </div>
       </div>
+      <Footer></Footer>
     </div>
   );
 };
