@@ -30,30 +30,19 @@ const MapPage = ({ benches }) => {
         zoom: zoom,
       });
 
-      /*        map.on('load', function() {
-            map.addSource("points", {
-              type: "geojson",
-              data: {
-                type: "FeatureCollection",
-                features: [
-                  {for bench in benches {
-                      {
-                    // feature for Mapbox DC
-                    type: "Feature",
-                    geometry: {
-                      type: "Point",
-                      coordinates: [bench.lat, bench.lng],
-                    },
-                    properties: {
-                      title: bench.title,
-                    },
-                  },
-                  }}
-                    
-                ],
-              },
-            });
-        });*/
+      map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
+      map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
+      
+      map.on('load', function() {
+        for (var bench in benches) {
+          new mapboxgl.Marker({
+            color: "#94F59B",
+          })
+            .setLngLat([bench.lng, bench.lat])
+            .addTo(map);
+        }
+      })
+      
     }, [lng, lat, zoom]);
 
     return (

@@ -47,6 +47,7 @@ const Bench = ({ bench }) => {
 
     // Add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
+    map.addControl(new mapboxgl.FullscreenControl(), "bottom-right");
 
     // Clean up on unmount
     return () => map.remove();
